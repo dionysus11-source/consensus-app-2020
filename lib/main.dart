@@ -58,13 +58,13 @@ class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   List<Consensus> consensusList = List();
   TabController controller;
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     controller = TabController(length: 2, vsync: this);
-    String cid = '005930';
-    getInfo(cid);
+    getInitData();
     print("test");
   }
 
@@ -76,11 +76,31 @@ class _MyHomePageState extends State<MyHomePage>
     super.dispose();
   }
 
-  String getCompanyName(String cid) {
-    return '삼성전자'; // To be fixed
+  Future<List> loadFile() async {
+    var file =
+        await DefaultAssetBundle.of(context).loadString('repo/init.json');
+    var test = jsonDecode(file);
+    return test;
   }
 
-  void getInfo(String cid) async {
+  void getInitData() async {
+    await loadFile().then((value) => {
+          getInfos(value)
+          // for (var item in value)
+          // {getInfo(item['companyName'], item['companyId'])}
+        });
+  }
+
+  Future<void> getInfos(List items) async {
+    for (var item in items) {
+      await getInfo(item['companyName'], item['companyId']);
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future<void> getInfo(String companyName, String cid) async {
     Map<String, String> header = {
       "user-agent":
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36"
@@ -103,13 +123,13 @@ class _MyHomePageState extends State<MyHomePage>
       date.add(consensus[i]['YYMM']);
     }
     consensusList.add(Consensus(
-        companyName: getCompanyName(cid),
+        companyName: companyName,
         companyId: cid,
         date: date,
         per: per,
         eps: eps,
         profit: profit));
-    print("test log");
+    print(companyName);
   }
 
   @override
@@ -128,9 +148,32 @@ class _MyHomePageState extends State<MyHomePage>
       ),
       body: TabBarView(
         children: <Widget>[
-          FirstApp(
-            list: consensusList,
-          ),
+          isLoading
+              ? Container(
+                  height: 120.0,
+                  width: 200.0,
+                  child: Card(
+                    color: Colors.white,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        CircularProgressIndicator(),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        Text(
+                          'Downloading File',
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              : FirstApp(
+                  list: consensusList,
+                ),
           SecondApp(
             list: consensusList,
           )

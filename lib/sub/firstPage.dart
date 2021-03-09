@@ -6,6 +6,7 @@ class FirstApp extends StatelessWidget {
   FirstApp({Key key, this.list}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    print("first app is build");
     return Scaffold(
       body: Container(
         child: Center(
@@ -60,6 +61,7 @@ class FirstApp extends StatelessWidget {
                         child: Text(
                       list[position].profit[0],
                       style: TextStyle(fontSize: 12),
+                      textAlign: TextAlign.center,
                     )),
                     TableCell(
                         child: Text(
@@ -145,54 +147,6 @@ class FirstApp extends StatelessWidget {
                 ],
               ),
             );
-            /*           return Card(
-              child: Row(children: [
-                Column(
-                  children: <Widget>[
-                    Text(list[position].companyName),
-                    Text(list[position].companyId)
-                  ],
-                ),
-                Column(children: <Widget>[
-                  Text('날짜'),
-                  Text('영업이익'),
-                  Text('EPS'),
-                  Text('PER')
-                ]),
-                Column(
-                  children: <Widget>[
-                    Text(list[position].date[0]),
-                    Text(list[position].profit[0]),
-                    Text(list[position].eps[0]),
-                    Text(list[position].per[0]),
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Text(list[position].date[1]),
-                    Text(list[position].profit[1]),
-                    Text(list[position].eps[1]),
-                    Text(list[position].per[1]),
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Text(list[position].date[2]),
-                    Text(list[position].profit[2]),
-                    Text(list[position].eps[2]),
-                    Text(list[position].per[2]),
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Text(list[position].date[3]),
-                    Text(list[position].profit[3]),
-                    Text(list[position].eps[3]),
-                    Text(list[position].per[3]),
-                  ],
-                ),
-              ]),
-            );*/
           },
           itemCount: list.length,
         )),
