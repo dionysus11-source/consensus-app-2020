@@ -127,7 +127,14 @@ class _MyHomePageState extends State<MyHomePage>
         title: Text('Consensus App'),
       ),
       body: TabBarView(
-        children: <Widget>[FirstApp(), SecondApp()],
+        children: <Widget>[
+          FirstApp(
+            list: consensusList,
+          ),
+          SecondApp(
+            list: consensusList,
+          )
+        ],
         controller: controller,
       ),
       bottomNavigationBar: TabBar(
